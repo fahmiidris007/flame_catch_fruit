@@ -1,25 +1,21 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_catch_fruit/common/constant.dart';
+import 'package:flame_catch_fruit/components/player.dart';
 
 class CatchFruitPage extends FlameGame {
-  SpriteComponent bg = SpriteComponent();
+  final SpriteComponent _bg = SpriteComponent();
+  final Player _player = Player();
 
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
-    bg
+    _bg
       ..sprite = await loadSprite(Constant.bg)
       ..size = size;
-    add(bg);
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    log('update');
+    add(_bg);
+    add(_player);
   }
 }
