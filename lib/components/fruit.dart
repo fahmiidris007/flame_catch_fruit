@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_catch_fruit/common/constant.dart';
+import 'package:flame_catch_fruit/components/player.dart';
 import 'package:flame_catch_fruit/pages/catch_fruit_page.dart';
 
-class Fruit extends SpriteComponent with HasGameRef<CatchFruitPage> {
+class Fruit extends SpriteComponent
+    with HasGameRef<CatchFruitPage>, CollisionCallbacks {
   final double _speed = 100;
   final Random _random = Random();
 
@@ -22,6 +25,7 @@ class Fruit extends SpriteComponent with HasGameRef<CatchFruitPage> {
     position.x = _random.nextInt((gameRef.size.x).toInt()).toDouble();
     position.y = 100;
     anchor = Anchor.center;
+    add(CircleHitbox());
   }
 
   @override
@@ -32,6 +36,15 @@ class Fruit extends SpriteComponent with HasGameRef<CatchFruitPage> {
     if (position.y > gameRef.size.y) {
       removeFromParent();
       gameRef.add(Fruit());
+    }
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+    if (other is Player) {
+      position.y = gameRef.size.y + 100;
+      gameRef.score += 1;
     }
   }
 }
